@@ -1,16 +1,52 @@
 const { select, input } = require('@inquirer/prompts')
 
+let item = {
+    produto: "Tomate",
+    quantidade: "5",
+    tipo: "unidade",
+    carrinho: true
+}
+
+let listaItem = [ item ]
+
 const cadastrando = async  () => {
-    const item = await input({message: "Digite o produto: "})
+    const produto = await input({message: "Digite o produto: "})
     // chama a função INPUT importada no módulo INQUIRER
 
-    if (item.length == 0){
-        console.log("Escreva um item para cadastrar na lista!")
+    let quantidade = "0"
+
+    let tipo = "0"
+
+    const opc = await input({message: "\n[1] Líquido (l) \n[2] Peso (kg) \n[3] Unidade \n> "})
+
+    if (opc == 1){
+        quantidade = await input({message: "Digite o volume (litro): "})
+        tipo = " litro"
+        // chama a função INPUT importada no módulo INQUIRER
+    } else if (opc == 2){
+        quantidade = await input({message: "Digite o peso (kg): "})
+        tipo = " kg"
+        // chama a função INPUT importada no módulo INQUIRER
+    } else {
+        quantidade = await input({message: "Digite a quantidade: "})
+        tipo = " un"
+        // chama a função INPUT importada no módulo INQUIRER
+    }
+
+    if (produto.length == 0){
+        console.log("\nEscreva um item para cadastrar na lista!\n")
         return
         // Caso necessário podemos chamar a função no RETURN CADASTRANDO() de forma
         // que o user ficasse obrigado a digitar um item para a lista estando preso no
         // return função()
+    } else {
+        console.log("\nItem cadastrado com sucesso!\n")
     }
+
+    listaItem.push(
+        // push = add
+        { produto: produto, quantidade: quantidade, tipo: tipo, carrinho: false }
+    )
 }
 
 const start = async() => {
@@ -46,6 +82,7 @@ const start = async() => {
             
             case "listar":
                 console.log("\n...LISTA DE COMPRAS...\n")
+                console.log(listaItem)
                 break
             case "sair":
                 console.log("\nENCERRANDO...\n")
