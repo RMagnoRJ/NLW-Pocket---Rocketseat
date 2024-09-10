@@ -56,7 +56,7 @@ for (let item in pessoa2){
     console.log(item + " : " + pessoa2[item])     
 }
 
-console.log("\n----------- CADASTRO.LENGH -----------------------\n");
+console.log("\n----------- CADASTRO.Length -----------------------\n");
 
 for (let i = 0; i < cadastro.length; i++){
     
