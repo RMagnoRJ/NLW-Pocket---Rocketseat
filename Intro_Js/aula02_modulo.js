@@ -1,19 +1,20 @@
-const { select, input } = require('@inquirer/prompts')
+const { select, input, checkbox } = require('@inquirer/prompts')
 
 let item = {
-    produto: "Tomate",
-    quantidade: "5",
-    tipo: "unidade",
+    value: 'Tomate',
+    //quantidade: "5",
+    //tipo: "unidade",
     carrinho: true
 }
 
 let listaItem = [ item ]
 
 const cadastrando = async  () => {
+
     const produto = await input({message: "Digite o produto: "})
     // chama a função INPUT importada no módulo INQUIRER
 
-    let quantidade = "0"
+    /* let quantidade = "0"
 
     let tipo = "0"
 
@@ -32,7 +33,7 @@ const cadastrando = async  () => {
         tipo = " un"
         // chama a função INPUT importada no módulo INQUIRER
     }
-
+    */
     if (produto.length == 0){
         console.log("\nEscreva um item para cadastrar na lista!\n")
         return
@@ -45,8 +46,35 @@ const cadastrando = async  () => {
 
     listaItem.push(
         // push = add
-        { produto: produto, quantidade: quantidade, tipo: tipo, carrinho: false }
+        // { produto: produto, quantidade: quantidade, tipo: tipo, carrinho: false }
+        { value: produto, carrinho: false }
     )
+}
+
+const listaDeCompras = async () => {
+
+    const respostas = await checkbox({
+        message: "SETAS navega entre os itens ESPAÇO marca/desmarca item ENTER confirma produto no carrinho",
+        choices: [...listaItem],
+        instructions: false
+    })
+
+    if(respostas.length == 0){
+        console.log("\nNenhum item foi selecionado\n")
+        return
+    }
+
+    listaItem.forEach((it) => {
+        it.carrinho = false
+    })
+
+    respostas.forEach((resposta) => {
+        const item = listaItem.find((it) => {
+            return it.value == resposta
+        })
+       item.carrinho = true
+    })
+
 }
 
 const start = async() => {
@@ -55,21 +83,22 @@ const start = async() => {
 
         const opcao = await select({
             // chama o SELECT importado no modulo INQUIRER
-            message: "Menu >",
+            message: "\n\n***** Menu *****\n\n>",
             choices: [
                 {
-                    name: "Cadastrar item",
+                    name: ">> Cadastrar item",
                     value: "cadastrar"
                 },
                 {
-                    name: "Apresentar Lista de Compras",
+                    name: ">> Apresentar Lista de Compras",
                     value: "listar"
                 },
                 {
-                    name: "Sair",
+                    name: ">> Sair",
                     value: "sair"
                 }
             ]
+        
         })
 
         switch(opcao) {
@@ -82,7 +111,8 @@ const start = async() => {
             
             case "listar":
                 console.log("\n...LISTA DE COMPRAS...\n")
-                console.log(listaItem)
+                //console.log(listaItem)
+                await listaDeCompras()
                 break
             case "sair":
                 console.log("\nENCERRANDO...\n")
