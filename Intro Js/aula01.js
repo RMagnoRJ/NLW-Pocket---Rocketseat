@@ -85,7 +85,7 @@ for (let i = 0; i < cadastro.length; i++){
 
 */
 
-console.log("\n----------- JOGADOR1 -----------------------\n");
+console.log("\n----------- JOGADOR1 info( ) -----------------------\n");
 
 let jogador1 = {
     titulo1 : "Championship Junior",
@@ -94,10 +94,25 @@ let jogador1 = {
     titulo4 : "Championship Master",
     info : (info) => {
         console.log(info)
+    },
+    full : () => {
+        let cont = 0;
+
+        for (item in jogador1){
+            if (cont < 4){
+                console.log(item + " : " + jogador1[item])
+            }
+            cont = cont + 1;
+        }
     }
 }
 
-jogador1.info(jogador1.titulo1)
+jogador1.info(jogador1.titulo1);
+
+console.log("\n----------- JOGADOR1 FULL -----------------------\n");
+
+jogador1.full();
+
 
 console.log("\n----------- PLAYER1 SOMA() -----------------------\n");
 
@@ -119,6 +134,7 @@ function soma (){
     }
 
 soma();
+
 
 
 
