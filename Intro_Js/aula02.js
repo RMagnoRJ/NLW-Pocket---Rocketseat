@@ -68,3 +68,50 @@ tabuadaPar(5);
 //                  ignorando a pasta NODE_MODULES, código no arquivo:
 //                  node_modules/
 
+// (d) const { select } = require('modulo') : o comando REQUIRE diz ao JS que o módulo escrito entre 
+//                                             parênteses é REQUISITO para o código funcionar. Assim,
+//                                             o js importa o módulo NPM instalado e o disponibiliza 
+//                                             para o uso.
+
+console.log("\n----------- INQUIRER -----------------------\n");
+
+const { select } = require('@inquirer/prompts')
+
+const start = async() => {
+
+    while(true) {
+
+        const opcao = await select({
+            message: "Menu >",
+            choices: [
+                {
+                    name: "Cadastrar",
+                    value: "cadastrar"
+                },
+                {
+                    name: "Listar",
+                    value: "listar"
+                },
+                {
+                    name: "Sair",
+                    value: "sair"
+                }
+            ]
+        })
+
+        switch(opcao) {
+
+            case "cadastrar":
+                console.log("\nCADASTRANDO...\n")
+                break
+            
+            case "listar":
+                console.log("\nLISTANDO...\n")
+                break
+            case "sair":
+                console.log("\nENCERRANDO...\n")
+                return
+        }
+    }
+}
+start();
