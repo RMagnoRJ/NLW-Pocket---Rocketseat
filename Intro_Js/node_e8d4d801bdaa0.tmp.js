@@ -1,15 +1,11 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
 
-
-/* 
-    
-*/
 let item = {
-    value: "LISTA DE COMPRAS",
-    quantidade: "0",
-    tipo: "0",
+    value: 'Tomate',
+    quantidade: "5",
+    //tipo: "unidade",
     checked: true
-};
+}
 
 let listaItem = [ item ]
 
@@ -18,13 +14,13 @@ const cadastrando = async  () => {
     const item = await input({message: "Digite o produto: "})
     // chama a função INPUT importada no módulo INQUIRER
 
-    //let quantidade = await input({message: "Digite a quantidade: "})
+    let quantidade = await input({message: "Digite a quantidade: "})
 
-    let quantidade = "0"
+    /* let quantidade = "0"
 
     let tipo = "0"
 
-    const opc = await input({message: "\n[1] Líquido (litro) \n[2] Peso (kg) \n[3] Unidade \n> "})
+    const opc = await input({message: "\n[1] Líquido (l) \n[2] Peso (kg) \n[3] Unidade \n> "})
 
     if (opc == 1){
         quantidade = await input({message: "Digite o volume (litro): "})
@@ -36,10 +32,10 @@ const cadastrando = async  () => {
         // chama a função INPUT importada no módulo INQUIRER
     } else {
         quantidade = await input({message: "Digite a quantidade: "})
-        tipo = " unidade"
+        tipo = " un"
         // chama a função INPUT importada no módulo INQUIRER
     }
-    
+    */
 
     if (item.length == 0){
         console.log("Escreva um item para cadastrar na lista!")
@@ -54,14 +50,14 @@ const cadastrando = async  () => {
     listaItem.push(
         // push = add
         // { produto: produto, quantidade: quantidade, tipo: tipo, carrinho: false }
-        { value: item, quantidade: quantidade, tipo: tipo, checked: false }
+        { value: item, quantidade: quantidade, checked: false }
     )
 }
 
 const listaDeCompras = async () => {
 
     const respostas = await checkbox({
-        message: "\n[SETAS] navega entre os itens \n[ESPAÇO] marca/desmarca item \n[ENTER] confirma produto no carrinho\n",
+        message: "SETAS navega entre os itens ESPAÇO marca/desmarca item ENTER confirma produto no carrinho",
         choices: [...listaItem],
         instructions: false,
     })
@@ -86,33 +82,8 @@ const listaDeCompras = async () => {
 
 const mostraLista = async () => {
 
-    let i = 0
+    console.log(listaItem)
 
-    if (listaItem.length > 1){
-
-        for(i ; i < listaItem.length; i++){
-
-            if (i >= 1){
-                console.log("\n--------------------")
-                console.log("# " + listaItem[i].value.toUpperCase())
-                console.log("  "+ listaItem[i].quantidade + " " + listaItem[i].tipo)
-                console.log("--------------------\n")
-                const cont = await input({message: "[C]ontinuar > "})
-                console.log("--------------------\n")
-                
-            } 
-        }
-        if (i >= 1){
-            console.log("TOTAL: " + (i) + " itens")
-            console.log("--------------------\n")
-        } 
-    } else {
-        console.log("\n--------------------")
-        console.log("# Nenhum registro \n encontrado!")
-        console.log("--------------------")
-        console.log("TOTAL: "+ i + " item")
-        console.log("--------------------\n")
-    }
 }
 
 const start = async() => {
@@ -121,7 +92,7 @@ const start = async() => {
 
         const opcao = await select({
             // chama o SELECT importado no modulo INQUIRER
-            message: "\n***** MENU *****\n\n>",
+            message: "Menu >",
             choices: [
                 {
                     name: "Cadastrar item",
