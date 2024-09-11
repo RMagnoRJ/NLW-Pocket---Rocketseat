@@ -61,7 +61,7 @@ const cadastrando = async  () => {
 const listaDeCompras = async () => {
 
     const respostas = await checkbox({
-        message: "\n[SETAS] navega entre os itens \n[ESPAÇO] marca/desmarca item \n[ENTER] confirma produto no carrinho\n",
+        message: "\n[SETAS] navega entre os itens \n[ESPAÇO] marca/desmarca item \n[ENTER] retorna ao MENU\n",
         choices: [...listaItem],
         instructions: false,
     })
@@ -110,9 +110,55 @@ const mostraLista = async () => {
         console.log("\n--------------------")
         console.log("# Nenhum registro \n encontrado!")
         console.log("--------------------")
-        console.log("TOTAL: "+ i + " item")
+        console.log(" TOTAL: "+ i + " item")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
         console.log("--------------------\n")
     }
+}
+
+const itensComprados = async () => {
+
+    const comprados = listaItem.filter((item) => {
+        return item.checked == true
+    })
+
+    if (comprados.length <= 1){
+        console.log("\n--------------------")
+        console.log("0 itens encontrados!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
+        return
+    }
+
+    await select ({
+        message: "\n# " + (comprados.length - 1) + " itens comprados\n\n[ENTER] retorna ao MENU\n",
+        choices: [...comprados]
+    })
+}
+
+const faltaComprar = async () => {
+    const faltaComprar = listaItem.filter((item) => {
+        return item.checked == false
+    })
+
+    if (faltaComprar.length == 0){
+        console.log("\n--------------------")
+        console.log("0 itens encontrados!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
+        return
+    } else {
+        await select ({
+            message: "\nRestam # " + faltaComprar.length + " itens\n\n[ENTER] retorna ao MENU\n",
+            choices: [...faltaComprar]
+        })
+    }
+
+    
+
 }
 
 const start = async() => {
@@ -128,12 +174,20 @@ const start = async() => {
                     value: "cadastrar"
                 },
                 {
-                    name: "Apresentar Lista de Compras",
-                    value: "listar"
+                    name: "Falta comprar",
+                    value: "comprar"
                 },
                 {
-                    name: "Marcar itens na Lista",
+                    name: "Itens comprados",
+                    value: "comprados"
+                },
+                {
+                    name: "Check itens",
                     value: "marcar"
+                },
+                {
+                    name: "Histórico de Compras",
+                    value: "listar"
                 },
                 {
                     name: "Sair",
@@ -146,21 +200,31 @@ const start = async() => {
         switch(opcao) {
 
             case "cadastrar":
-                //console.log("\n...CADASTRO...\n")
+                
                 await cadastrando()
                 //o await avisa para o JS que ele terá que AGUARDAR a execução da função
                 break
             
             case "listar":
-                //console.log("\n...LISTA DE COMPRAS...\n")
-                //console.log(listaItem)
+                
                 await mostraLista()
                 break
+
+            case "comprar":
+                
+                await faltaComprar()
+                break
+
             case "marcar":
-                    //console.log("\n...LISTA DE COMPRAS...\n")
-                    //console.log(listaItem)
-                    await listaDeCompras()
-                    break
+                
+                await listaDeCompras()
+                break
+
+            case "comprados":
+                
+                await itensComprados()
+                break
+
             case "sair":
                 console.log("\nENCERRANDO...\n")
                 return
