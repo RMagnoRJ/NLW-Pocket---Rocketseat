@@ -1,23 +1,24 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
 
+const fs = require("fs").promises
 
-/* 
-   let item = {
-    value: "LISTA DE COMPRAS",
-    quantidade: "0",
-    tipo: "0",
-    checked: true
-}; 
-*/
+let listaItem 
 
-let item = {
-    value: "LISTA DE COMPRAS",
-    quantidade: "0",
-    tipo: "0",
-    checked: true
+const carregarCompras = async () => {
+
+    try{
+        const dados = await fs.readFile("compras.json", "utf-8")
+        listaItem = JSON.parse(dados)
+    }
+    catch(erro){
+        listaItem = []
+    }
 }
 
-let listaItem = [item]
+const salvarCompras = async () => {
+
+    await fs.writeFile("compras.json", JSON.stringify(listaItem, null, 2))
+}
 
 const cadastrando = async  () => {
 
@@ -72,6 +73,15 @@ const cadastrando = async  () => {
 
 const listaDeCompras = async () => {
 
+    if(listaItem == 0){
+        console.log("\n--------------------")
+        console.log("0 itens encontrados!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
+        return
+    }
+
     const respostas = await checkbox({
         message: "\n[SETAS] navega entre os itens \n[ESPAÇO] marca/desmarca item \n[ENTER] retorna ao MENU\n",
         choices: [...listaItem],
@@ -97,36 +107,31 @@ const listaDeCompras = async () => {
 }
 
 const mostraLista = async () => {
+    
+    let total = 0
+    console.log("\n--------------------")
 
-    let i = 0
-
-    if (listaItem.length > 1){
-
-        for(i ; i < listaItem.length; i++){
-
-            if (i >= 1){
-                console.log("\n--------------------")
-                console.log("# " + listaItem[i].value.toUpperCase())
-                console.log("  "+ listaItem[i].quantidade + " " + listaItem[i].tipo)
-                console.log("--------------------\n")
-                const cont = await input({message: "[ENTER] Avançar > "})
-                console.log("--------------------\n")
-                
-            } 
-        }
-        if (i >= 1){
-            console.log("TOTAL: " + (i) + " itens")
-            console.log("--------------------\n")
-        } 
-    } else {
-        console.log("\n--------------------")
+    if (listaItem.length == 0 || listaItem == null){
         console.log("# Nenhum registro \n encontrado!")
         console.log("--------------------")
-        console.log(" TOTAL: "+ i + " item")
+    }
+
+    
+    for (let i = 0 ; i < listaItem.length; i++){
+        total++
+        console.log("# " + listaItem[i].value.toUpperCase())
+        console.log("  "+ listaItem[i].quantidade + " " + listaItem[i].tipo)
         console.log("--------------------")
         const cont = await input({message: "[ENTER] Avançar > "})
-        console.log("--------------------\n")
+        console.log("--------------------")
+       
     }
+  
+    console.log("### TOTAL " + total + " item")
+    console.log("--------------------")
+    const cont = await input({message: "[ENTER] Avançar > "})
+    console.log("--------------------\n")
+
 }
 
 const itensComprados = async () => {
@@ -135,7 +140,7 @@ const itensComprados = async () => {
         return item.checked == true
     })
 
-    if (comprados.length <= 1){
+    if (comprados.length == 0){
         console.log("\n--------------------")
         console.log("0 itens encontrados!")
         console.log("--------------------")
@@ -172,6 +177,14 @@ const faltaComprar = async () => {
 
 const excluir = async () => {
 
+    if(listaItem == 0){
+        console.log("\n--------------------")
+        console.log("0 itens encontrados!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
+        return
+    }
 
     const itensExcluidos = listaItem.map((item) => {
         return {value: item.value, checked: false}
@@ -208,8 +221,13 @@ const limparConsole = () => {
 
 const start = async() => {
 // ASYNC significa que será ASSÍNCRONO já que, ele terá que AWAIT algumas funções
+    await carregarCompras()
+    
     while(true) {
+
         limparConsole()
+        await salvarCompras()
+
         const opcao = await select({
             // chama o SELECT importado no modulo INQUIRER
             message: "\n***** MENU *****\n\n>",

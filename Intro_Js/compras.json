@@ -1,0 +1,14 @@
+[
+  {
+    "value": "refri",
+    "quantidade": "3",
+    "tipo": " unidade",
+    "checked": false
+  },
+  {
+    "value": "cebola",
+    "quantidade": "5",
+    "tipo": " unidade",
+    "checked": false
+  }
+]
