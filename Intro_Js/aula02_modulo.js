@@ -24,7 +24,13 @@ const cadastrando = async  () => {
     const item = await input({message: "Digite o produto: "})
     // chama a função INPUT importada no módulo INQUIRER
 
-    //let quantidade = await input({message: "Digite a quantidade: "})
+    if (item.length == 0){
+        console.log("Nenhuma entrada registrada!")
+        return
+        // Caso necessário podemos chamar a função no RETURN CADASTRANDO() de forma
+        // que o user ficasse obrigado a digitar um item para a lista estando preso no
+        // return função()
+    } 
 
     let quantidade = "0"
 
@@ -35,31 +41,31 @@ const cadastrando = async  () => {
     if (opc == 1){
         quantidade = await input({message: "Digite o volume (litro): "})
         tipo = " litro"
-        // chama a função INPUT importada no módulo INQUIRER
+        console.log("\n--------------------")
+        console.log("   Item cadastrado \n    com sucesso!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
     } else if (opc == 2){
         quantidade = await input({message: "Digite o peso (kg): "})
         tipo = " kg"
-        // chama a função INPUT importada no módulo INQUIRER
+        console.log("\n--------------------")
+        console.log("   Item cadastrado \n    com sucesso!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
     } else {
         quantidade = await input({message: "Digite a quantidade: "})
         tipo = " unidade"
-        // chama a função INPUT importada no módulo INQUIRER
-    }
-    
-
-    if (item.length == 0){
-        console.log("Escreva um item para cadastrar na lista!")
-        return
-        // Caso necessário podemos chamar a função no RETURN CADASTRANDO() de forma
-        // que o user ficasse obrigado a digitar um item para a lista estando preso no
-        // return função()
-    } else {
-        console.log("Item cadastrado com sucesso!")
+        console.log("\n--------------------")
+        console.log("   Item cadastrado \n    com sucesso!")
+        console.log("--------------------")
+        const cont = await input({message: "[ENTER] Avançar > "})
+        console.log("--------------------\n")
     }
 
     listaItem.push(
         // push = add
-        // { produto: produto, quantidade: quantidade, tipo: tipo, carrinho: false }
         { value: item, quantidade: quantidade, tipo: tipo, checked: false }
     )
 }
@@ -196,10 +202,14 @@ const excluir = async () => {
 
 }
 
+const limparConsole = () => {
+    console.clear();
+}
+
 const start = async() => {
 // ASYNC significa que será ASSÍNCRONO já que, ele terá que AWAIT algumas funções
     while(true) {
-
+        limparConsole()
         const opcao = await select({
             // chama o SELECT importado no modulo INQUIRER
             message: "\n***** MENU *****\n\n>",
