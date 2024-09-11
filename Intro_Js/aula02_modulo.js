@@ -2,16 +2,22 @@ const { select, input, checkbox } = require('@inquirer/prompts')
 
 
 /* 
-    
+   let item = {
+    value: "LISTA DE COMPRAS",
+    quantidade: "0",
+    tipo: "0",
+    checked: true
+}; 
 */
+
 let item = {
     value: "LISTA DE COMPRAS",
     quantidade: "0",
     tipo: "0",
     checked: true
-};
+}
 
-let listaItem = [ item ]
+let listaItem = [item]
 
 const cadastrando = async  () => {
 
@@ -156,8 +162,37 @@ const faltaComprar = async () => {
             choices: [...faltaComprar]
         })
     }
+}
 
-    
+const excluir = async () => {
+
+
+    const itensExcluidos = listaItem.map((item) => {
+        return {value: item.value, checked: false}
+    })
+
+    const itensAdeletar = await checkbox({
+        message: "\n[SETAS] navega entre os itens \n[ESPAÇO] marca item para excluir\n[ENTER] retorna ao MENU\n",
+        choices: [...itensExcluidos],
+        instructions: false,
+    })
+
+    if(itensAdeletar.length == 0){
+        console.log("Nenhum item selecionado!")
+        return
+    }
+
+    itensAdeletar.forEach((itemDeletado) => {
+        listaItem = listaItem.filter((itemFiltrado) => {
+            return itemFiltrado.value != itemDeletado
+        })
+    })
+
+    console.log("\n--------------------")
+    console.log("Item excluído \ncom sucesso!!")
+    console.log("--------------------")
+    const cont = await input({message: "[ENTER] Avançar > "})
+    console.log("--------------------\n")
 
 }
 
@@ -172,6 +207,10 @@ const start = async() => {
                 {
                     name: "Cadastrar item",
                     value: "cadastrar"
+                },
+                {
+                    name: "Excluir item",
+                    value: "excluir"
                 },
                 {
                     name: "Falta comprar",
@@ -203,6 +242,11 @@ const start = async() => {
                 
                 await cadastrando()
                 //o await avisa para o JS que ele terá que AGUARDAR a execução da função
+                break
+
+            case "excluir":
+                
+                await excluir()
                 break
             
             case "listar":
