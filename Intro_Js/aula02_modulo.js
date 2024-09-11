@@ -97,7 +97,7 @@ const mostraLista = async () => {
                 console.log("# " + listaItem[i].value.toUpperCase())
                 console.log("  "+ listaItem[i].quantidade + " " + listaItem[i].tipo)
                 console.log("--------------------\n")
-                const cont = await input({message: "[C]ontinuar > "})
+                const cont = await input({message: "[ENTER] Avançar > "})
                 console.log("--------------------\n")
                 
             } 
